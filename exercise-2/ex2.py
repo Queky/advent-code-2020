@@ -54,7 +54,7 @@ class PasswordValidator:
 
 class LoadFile:
 
-    entries = []
+    lines = []
 
     def __init__(self):
         pass
@@ -62,10 +62,10 @@ class LoadFile:
     def read_file(self):
         file = open("entries.txt", "r")
         for line in file:
-            self.entries.append(line.strip())
+            self.lines.append(line.strip())
 
     def get_file_entries(self):
-        return self.entries
+        return self.lines
 
 
 if __name__ == "__main__":
