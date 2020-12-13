@@ -1,13 +1,14 @@
+import re
+
 
 class Passport:
-
     passport_fields = []
-    mandatory_values = [
+    mandatory_fields = [
         ['byr', 4, 1920, 2002],
         ['iyr', 4, 2010, 2020],
         ['eyr', 4, 2020, 2030],
         ['hgt', ['cm', 150, 193], ['in', 59, 76]],
-        ['hcl', '#', '[a-zA-Z0-9]'],
+        ['hcl', '#', 6, '[a-zA-Z0-9]'],
         ['ecl', ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']],
         ['pid', 9]]
 
@@ -15,21 +16,42 @@ class Passport:
         self.passport_fields = passport_fields
 
     def contains_mandatory_fields(self):
-        for mandatory_value in self.mandatory_values:
-            any_found = False
+        for mandatory_field in self.mandatory_fields:
+            valid_found = False
             for field in self.passport_fields:
-                if mandatory_value[0] in field:
-                    any_found = True
-            if not any_found:
+                if mandatory_field[0] in field:
+                    valid_found = self.validate_field(mandatory_field, field)
+            if not valid_found:
                 return False
         return True
 
-    def validate_field(self, field):
-        pass
+    @staticmethod
+    def validate_field(mandatory_field, field: str):
+        value = field.split(':')[1]
+        if mandatory_field[0] == 'byr':
+            return len(value) == mandatory_field[1] and mandatory_field[2] <= int(value) <= mandatory_field[3]
+        elif mandatory_field[0] == 'iyr':
+            return len(value) == mandatory_field[1] and mandatory_field[2] <= int(value) <= mandatory_field[3]
+        elif mandatory_field[0] == 'eyr':
+            return len(value) == mandatory_field[1] and mandatory_field[2] <= int(value) <= mandatory_field[3]
+        elif mandatory_field[0] == 'hgt':
+            if mandatory_field[1][0] in value:
+                sanitized_value = int(value.replace(mandatory_field[1][0], ''))
+                return mandatory_field[1][1] <= sanitized_value <= mandatory_field[1][2]
+            elif mandatory_field[2][0] in value:
+                sanitized_value = int(value.replace(mandatory_field[2][0], ''))
+                return mandatory_field[2][1] <= sanitized_value <= mandatory_field[2][2]
+        elif mandatory_field[0] == 'hcl':
+            sanitized_value = value.replace(mandatory_field[1], '')
+            return mandatory_field[1] in value and len(sanitized_value) == mandatory_field[2] and \
+                   re.match(mandatory_field[3], sanitized_value)
+        elif mandatory_field[0] == 'ecl':
+            return value in mandatory_field[1]
+        elif mandatory_field[0] == 'pid':
+            return len(value) == mandatory_field[1]
 
 
 class PassportGenerator:
-
     passport_list = []
 
     def generate_passports(self, entries):
@@ -47,7 +69,6 @@ class PassportGenerator:
 
 
 class PassportValidator:
-
     validPassports = 0
 
     def validate_passports(self, passports):
@@ -58,7 +79,6 @@ class PassportValidator:
 
 
 class LoadFile:
-
     lines = []
 
     def __init__(self):
