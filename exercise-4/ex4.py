@@ -28,11 +28,7 @@ class Passport:
     @staticmethod
     def validate_field(mandatory_field, field: str):
         value = field.split(':')[1]
-        if mandatory_field[0] == 'byr':
-            return len(value) == mandatory_field[1] and mandatory_field[2] <= int(value) <= mandatory_field[3]
-        elif mandatory_field[0] == 'iyr':
-            return len(value) == mandatory_field[1] and mandatory_field[2] <= int(value) <= mandatory_field[3]
-        elif mandatory_field[0] == 'eyr':
+        if mandatory_field[0] == 'byr' or mandatory_field[0] == 'iyr' or mandatory_field[0] == 'eyr':
             return len(value) == mandatory_field[1] and mandatory_field[2] <= int(value) <= mandatory_field[3]
         elif mandatory_field[0] == 'hgt':
             if mandatory_field[1][0] in value:
