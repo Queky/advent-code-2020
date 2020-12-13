@@ -35,9 +35,6 @@ class PasswordValidator:
 
     passwords: List[PasswordData] = []
 
-    def __init__(self):
-        pass
-
     def validate_passwords(self, data: PasswordData):
         occurrences = data.password.count(data.letter)
         if data.max >= occurrences >= data.min:
@@ -55,9 +52,6 @@ class PasswordValidator:
 class LoadFile:
 
     lines = []
-
-    def __init__(self):
-        pass
 
     def read_file(self):
         file = open("entries.txt", "r")

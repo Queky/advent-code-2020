@@ -77,9 +77,6 @@ class PassportValidator:
 class LoadFile:
     lines = []
 
-    def __init__(self):
-        pass
-
     def read_file(self):
         file = open("passports.txt", "r")
         for line in file:
